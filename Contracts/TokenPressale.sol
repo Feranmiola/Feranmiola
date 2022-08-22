@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IERC.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Presale{
+    //Variables grouped according to their roles in the contract
+    
     address public immutable admin;
     IERC20 token;
 
@@ -26,6 +28,8 @@ contract Presale{
     event PresaleEnded(uint endTime, uint _raisedBNB, uint tokenLeft);
 
     //Vesting
+    //This is a way users can claim bought tokens in a presale gradually
+    //this pattern allows the admin to be able to set different percentages and when they are valid for claiming
      
     struct VestingPriod{
         uint percent;
@@ -50,7 +54,7 @@ contract Presale{
     event Claimed(address indexed claimer, uint Precent, uint tokenAmount);
 
 
-
+    //token is the token involved in the presale, the buy unit is the exchange unit, EX: 1000 dai for 1eth
 
     constructor(address _token, uint buyUnit, uint hardcap) {
         admin = payable(msg.sender);
@@ -70,6 +74,8 @@ contract Presale{
 
        emit  presaleStarted(block.timestamp, hardCap, token.balanceOf(address(this)));
     }
+    
+    //Buy was called inside the recieve function, this allows useres to send eth or bnb directly to the contract address and still be eligible to claim tokens 
 
     receive() external payable{
         buy();
@@ -177,6 +183,7 @@ contract Presale{
         emit Claimed(msg.sender, _Percent, _amount);
 
     }
+    
     //Admin Withdrawal
 
     function WithdrawRemainingFunds() external{
