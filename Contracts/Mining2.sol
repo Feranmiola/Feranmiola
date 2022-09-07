@@ -50,12 +50,13 @@ contract setup{
         tokenIndex++;
         
         IERC20 token = IERC20(_token);  
-        uint Amount = _initSupply += (tokenFee * _initSupply/10000);
+         uint fee =  tokenFee * _initSupply/10000;
+
+        uint Amount = _initSupply + fee;
 
         token.approve(address(this), Amount);
         token.transferFrom(msg.sender, address(this), Amount);
-        uint fee = Amount - _initSupply;
-
+       
         token.transfer(admin, fee);
 
         indextoToken[tokenIndex] = NewToken({
@@ -179,7 +180,7 @@ contract setup{
 
         if(indextoToken[id].currentSupply > 0){
             IERC20 token = IERC20(indextoToken[id].token);
-
+            
             token.transfer(msg.sender, indextoToken[id].currentSupply);
 
         }
@@ -189,7 +190,12 @@ contract setup{
         IERC20 _token = IERC20(newtoken);
 
         _token.approve(address(this), indextoToken[id].currentSupply);
-        _token.transferFrom(msg.sender, address(this), indextoToken[id].currentSupply);
+        
+        uint fee = tokenFee * indextoToken[id].currentSupply /10000;
+        uint amount = indextoToken[id].currentSupply +fee;
+
+        _token.transferFrom(msg.sender, address(this), amount);
+        _token.transfer(admin, fee);
 
     }
 
@@ -231,6 +237,56 @@ contract setup{
 //
 //
 
+        //View Functions
+
+    function getToken(uint id ) external view returns(address){
+        return indextoToken[id].token;
+    }
+    
+    function getCreator(uint id) external view returns(address){
+        return indextoToken[id].creator;
+    }
+
+    function getMaxSupply(uint id) external view returns(uint){
+        return indextoToken[id].maxSupply;
+    }
+
+    function getini9tSupply(uint id) external view returns(uint){
+        return indextoToken[id].initSupply;
+    }
+
+    function getcurrentSupply(uint id) external view returns(uint){
+        return indextoToken[id].currentSupply;
+    }
+
+    function getclaimedSupply(uint id) external view returns(uint){
+        return indextoToken[id].claimedSupply;
+    }
+
+    function getMineUnit(uint id) external view returns(uint){
+        return indextoToken[id].mineUnit;
+    }
+
+    function getMaxclaimmable(uint id) external view returns(uint){
+        return indextoToken[id].maxClaimmable;
+    }
+
+    function getclaimInterval(uint id) external view returns(uint){
+        return indextoToken[id].claimInterval;
+    }
+
+    function getmineFee(uint id) external view returns(uint){
+        return indextoToken[id].mineFee;
+    }
+
+    function getMinedEth(uint id) external view returns(uint){
+        return indextoToken[id].MinedEth;
+    }
+
+    function active(uint id) external view returns(bool){
+        return indextoToken[id].ended;
+    }
+
 
 
 
@@ -252,11 +308,11 @@ contract setup{
 //ethCreationFees
 //tokenCancellation fees
 
-    mapping(address => uint) usertoId;
+    mapping(address => uint) public usertoId;
     mapping(address => mapping(uint => uint)) usertoPaidEth;
     mapping(address => mapping(uint => uint)) usertointerval;
     mapping(address => mapping(uint => uint)) updatedTime;
-    mapping(address => mapping(address => uint)) claimedTokens;
+    mapping(address => mapping(address => uint)) public claimedTokens;
     mapping(address => mapping(uint => bool)) useridtoclosed;
     mapping(address => mapping(uint => bool)) WIthdrawn;
 
