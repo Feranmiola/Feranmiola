@@ -78,11 +78,12 @@ contract Vest {
     function claim() external {
         require(Vesting);
         require(claimCount[msg.sender] <= VestingCount,"CC");//Claiming Complete
-        claimCount[msg.sender] ++;
+        
 
         for(uint i = claimCount[msg.sender]; i<= VestingCount; i++){
             if(PeriodtoPercent[i].startTime <= block.timestamp){
                 claimmable[msg.sender] +=PeriodtoPercent[i].percent;
+                claimCount[msg.sender] ++;
             }
             else 
             break;
