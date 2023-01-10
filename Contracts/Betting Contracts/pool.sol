@@ -47,7 +47,7 @@ contract LogicPool is Initializable{
         require(!isContractPaused, "Contract is paused");
         if (_token == tokenA || _token == tokenB){
             
-            if(dataStorage.getBetCount(betid) == 0){
+            if(dataStorage.getPoolBetCount(betid) == 0){
                     dataStorage.setPoolFirstAddress(_token, betid);
                     
                 }else{
@@ -77,7 +77,7 @@ contract LogicPool is Initializable{
     function creditsStake(address _token, string calldata  betid, string calldata game, uint transactionID, uint stakeAmount) external{
          if (_token == tokenA || _token == tokenB){
             
-            if(dataStorage.getBetCount(betid) == 0){
+            if(dataStorage.getPoolBetCount(betid) == 0){
                     dataStorage.setPoolFirstAddress(_token, betid);
                     
                 }else{
