@@ -38,7 +38,7 @@ contract LogicPool is Initializable{
     }
     
 
-    function PoolnotP2P_Stake(address _token, string calldata  betid, string calldata game, uint transactionID, uint stakeAmount) external{
+    function Stake(address _token, string calldata  betid, string calldata game, uint transactionID, uint stakeAmount) external{
       require(!isContractPaused, "Contract is paused");
       if (_token == tokenA || _token == tokenB){
             
@@ -67,7 +67,7 @@ contract LogicPool is Initializable{
 
     }
 
-    function PoolnotP2P_creditsStake(address _token, string calldata  betid, string calldata game, uint transactionID, uint stakeAmount) external{
+    function creditsStake(address _token, string calldata  betid, string calldata game, uint transactionID, uint stakeAmount) external{
          require(!isContractPaused, "Contract is paused");
          if (_token == tokenA || _token == tokenB){
             
@@ -93,20 +93,20 @@ contract LogicPool is Initializable{
 
     }
 
-    function PoolnotP2P_getStaked(string calldata  betid, uint transactionID, address staker) external view returns(bool){
+    function getStaked(string calldata  betid, uint transactionID, address staker) external view returns(bool){
         return dataStorage._GetStaked(betid, transactionID, staker);
     }
 
-    function PoolnotP2P_getFinalised(string calldata  betid, uint transactionID, address reciever) public view returns(bool){
+    function getFinalised(string calldata  betid, uint transactionID, address reciever) public view returns(bool){
         return dataStorage._GetFinalised(betid, transactionID, reciever);
     }
 
 
 
 
-    function PoolnotP2P_end(string calldata  betid, uint transactionID, uint amount, uint fee, bool last) external{
+    function end(string calldata  betid, uint transactionID, uint amount, uint fee, bool last) external{
         require(!isContractPaused, "Contract is paused");
-        require(!PoolnotP2P_getFinalised(betid, transactionID, msg.sender), "Address already claimed");
+        require(!getFinalised(betid, transactionID, msg.sender), "Address already claimed");
         
         uint stake = dataStorage.GetStake(betid, transactionID, msg.sender);
         uint totalStake = dataStorage.GetTotalStake(betid);
@@ -127,7 +127,7 @@ contract LogicPool is Initializable{
 
     }
 
-    function PoolnotP2P_setDataStorage(address newStorage) external{
+    function setDataStorage(address newStorage) external{
         require(msg.sender == dataStorage.getAdmin(), "Not Admin");
         require(isContractPaused, "Pause the contract first");
 
