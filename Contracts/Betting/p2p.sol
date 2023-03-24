@@ -41,7 +41,7 @@ contract LogicP2P is Initializable{
     }
     
   
-    function P2PnotPool_Stake(address _token, string calldata  betid, string calldata game, uint stakeAmount) external{
+    function Stake(address _token, string calldata  betid, string calldata game, uint stakeAmount) external{
         // require(!fullyClaimed[betid], "Bet Id is currently in use");
         require(!isContractPaused, "Contract is paused");
         require(!dataStorage._GetStaked(betid, 1, msg.sender), "Address already staked");
@@ -75,7 +75,7 @@ contract LogicP2P is Initializable{
 
 
 
-    function  P2PnotPool_creditsStake(address _token, string calldata  betid, string calldata game, uint stakeAmount) external{
+    function  creditsStake(address _token, string calldata  betid, string calldata game, uint stakeAmount) external{
         require(!isContractPaused, "Contract is paused");
         // require(!fullyClaimed[betid], "Bet Id is currently in use");
 
@@ -105,20 +105,20 @@ contract LogicP2P is Initializable{
 
 
         
-    function P2PnotPool_getStaked(string calldata  betid, address staker) external view returns(bool){
+    function getStaked(string calldata  betid, address staker) external view returns(bool){
         return dataStorage._GetStaked(betid, 1, staker);
     }
 
-    function P2PnotPool_getFinalised(string calldata  betid, address reciever) public view returns(bool){
+    function getFinalised(string calldata  betid, address reciever) public view returns(bool){
         return dataStorage._GetFinalised(betid, 1, reciever);
     }
 
 
 
 
-    function P2PnotPool_end(string calldata  betid, uint amount, uint fee) external{
+    function end(string calldata  betid, uint amount, uint fee) external{
         require(!isContractPaused, "Contract is paused");
-        require(!P2PnotPool_getFinalised(betid, msg.sender), "Address already claimed");
+        require(!getFinalised(betid, msg.sender), "Address already claimed");
 
         uint stake = dataStorage.GetStake(betid, 1, msg.sender);
 
@@ -142,7 +142,7 @@ contract LogicP2P is Initializable{
 
     }
 
-    function P2PnotPool_setDataStorage(address newStorage) external{
+    function setDataStorage(address newStorage) external{
         require(msg.sender == dataStorage.getAdmin(), "Not Admin");
         require(isContractPaused, "Pause the contract first");
 
